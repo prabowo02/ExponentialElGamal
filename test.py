@@ -1,11 +1,10 @@
 import random
 
 from ExponentialElGamal import ExponentialElGamal
-from Safe1024BitPrimes import get_random_1024_bit_safe_prime
+from KeyGenerator import KeyGenerator
 
 # This may take a while.
-p = get_random_1024_bit_safe_prime()
-key = random.randint(2, p-1)
+p, key = KeyGenerator.generate_exponential_elgamal_key()
 elgamal = ExponentialElGamal(p, key)
 
 # Encrypt message 2

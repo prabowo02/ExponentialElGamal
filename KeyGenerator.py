@@ -1,5 +1,7 @@
 import random
 
+from Safe1024BitPrimes import get_random_1024_bit_safe_prime
+
 
 class KeyGenerator:
     # Input: 
@@ -76,3 +78,18 @@ class KeyGenerator:
                 continue
                 
             return g
+            
+            
+    # Input: the length of the key
+    # Output: A random `length`-bit safe prime and a secret key for elgamal
+    @staticmethod
+    def generate_exponential_elgamal_key(length=1024):
+        if length == 1024:
+            p = get_random_1024_bit_safe_prime()
+        else:
+            p = generate_safe_prime(length)
+        
+        # Secret key
+        key = random.randint(2, p-1)
+        
+        return p, key
