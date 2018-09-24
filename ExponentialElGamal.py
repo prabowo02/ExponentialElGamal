@@ -39,7 +39,7 @@ class ExponentialElGamal:
         self.g = KeyGenerator.generate_primitive_root(self.p)
         
         # Public key
-        self.h = pow(self.g, secret, self.p)
+        self.h = pow(self.g, key, self.p)
 
     
     def encrypt(self, message):

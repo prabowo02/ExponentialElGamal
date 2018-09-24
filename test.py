@@ -1,11 +1,12 @@
-import time
+import random
 
 from ExponentialElGamal import ExponentialElGamal
 from Safe1024BitPrimes import get_random_1024_bit_safe_prime
 
 # This may take a while.
-key = get_random_1024_bit_safe_prime()
-elgamal = ExponentialElGamal(key)
+p = get_random_1024_bit_safe_prime()
+key = random.randint(2, p-1)
+elgamal = ExponentialElGamal(p, key)
 
 # Encrypt message 2
 x = elgamal.encrypt(2)
