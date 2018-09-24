@@ -57,18 +57,6 @@ class KeyGenerator:
         while True:
             p = KeyGenerator.generate_prime_number(length - 1)
             
-            if p % 3 == 1:
-                continue
-            
-            if p % 5 == 2:
-                continue
-                
-            if p % 7 == 3:
-                continue
-                
-            if p % 11 == 5:
-                continue
-            
             if KeyGenerator.is_prime(2*p + 1):
                 return 2*p + 1
     
@@ -88,5 +76,3 @@ class KeyGenerator:
                 continue
                 
             return g
-            
-            

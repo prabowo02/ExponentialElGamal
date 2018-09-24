@@ -30,19 +30,16 @@ class CipherText:
 
 
 class ExponentialElGamal:
-    # If prime p of the form 2q+1, where q prime is given, p will be used, otherwise, a random 2p+1 prime is generated.
-    def __init__(self, number_of_bits=1024, p=None):
+    # Given a prime p and a secret key, generate g and public key
+    def __init__(self, p, key):
         # A prime number
         self.p = p or KeyGenerator.generate_safe_prime(number_of_bits)
         
         # Generator
         self.g = KeyGenerator.generate_primitive_root(self.p)
         
-        # Secret key
-        self.x = random.randint(2, self.p - 1)
-        
         # Public key
-        self.h = pow(self.g, self.x, self.p)
+        self.h = pow(self.g, secret, self.p)
 
     
     def encrypt(self, message):
@@ -51,8 +48,8 @@ class ExponentialElGamal:
         return CipherText(self.p, pow(self.g, r, self.p), pow(self.g, message, self.p) * pow(self.h, r, self.p) % self.p)
         
     
-    def decrypt(self, cipher_text, domain=(-1, 1)):
-        g_power_m = cipher_text.c2 * pow(pow(cipher_text.c1, self.x, self.p), self.p - 2, self.p) % self.p
+    def decrypt(self, cipher_text, key, domain=(-1, 1)):
+        g_power_m = cipher_text.c2 * pow(pow(cipher_text.c1, key, self.p), self.p - 2, self.p) % self.p
         
         for m in domain:
             if m >= 0:
