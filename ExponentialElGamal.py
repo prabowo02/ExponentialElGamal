@@ -31,12 +31,12 @@ class CipherText:
 
 class ExponentialElGamal:
     # Given a prime p and a secret key, generate g and public key
-    def __init__(self, p, key):
+    def __init__(self, p, key, g=None):
         # A prime number
-        self.p = p or KeyGenerator.generate_safe_prime(number_of_bits)
+        self.p = p
         
         # Generator
-        self.g = KeyGenerator.generate_primitive_root(self.p)
+        self.g = g or KeyGenerator.generate_primitive_root(self.p)
         
         # Public key
         self.h = pow(self.g, key, self.p)

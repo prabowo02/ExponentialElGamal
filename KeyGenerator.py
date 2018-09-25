@@ -81,7 +81,7 @@ class KeyGenerator:
             
             
     # Input: the length of the key
-    # Output: A random `length`-bit safe prime and a secret key for elgamal
+    # Output: A `length`-bit safe prime and a secret key for elgamal
     @staticmethod
     def generate_exponential_elgamal_key(length=1024):
         if length == 1024:
