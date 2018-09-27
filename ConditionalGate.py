@@ -12,6 +12,10 @@ class MultiElGamal:
         self.s = []
         
         self.g = g or KeyGenerator.generate_primitive_root(p)
+        
+        self.h = 1
+        for server in self.servers:
+            self.h = self.h * server.h % p
 
 
     def encrypt(self, text):
