@@ -1,33 +1,32 @@
 import random
 
-from ConditionalGate import MultiElGamal
+from ConditionalGate import ConditionalGate
 from ExponentialElGamal import ExponentialElGamal
-from KeyGenerator import KeyGenerator
-from Safe1024BitPrimes import get_random_1024_bit_safe_prime
+from KeyGenerator import generate_distributed_exponential_elgamal_keys
 
 
-p = get_random_1024_bit_safe_prime()
-g = KeyGenerator.generate_primitive_root()
+NUMBER_OF_SERVERS = 3
 
-alice_key = random.randint(2, p-1)
-alice = ExponentialElGamal(p, alice_key, g)
+p, g, h, secret_keys = generate_distributed_exponential_elgamal_keys(NUMBER_OF_SERVERS)
 
-bob_key = random.randint(2, p-1)
-bob = ExponentialElGamal(p, bob_key, g)
+alice = ExponentialElGamal(p, g, h)
+bob = ExponentialElGamal(p, g, h)
 
-server_keys = [random.randint(2, p-1) for i in range(3)]
-multiElGamal = MultiElGamal(p, server_keys, g)
-
-alice.h = multiElGamal.h
-bob.h = multiElGamal.h
+conditional_gate = ConditionalGate(NUMBER_OF_SERVERS, p, g, h)
 
 a = -1
-b = 1234
+b = 123
 
 cipher_a = alice.encrypt(a)
 cipher_b = bob.encrypt(b)
 
-distributed_cipher_a = multiElGamal.encrypt(cipher_a)
-distributed_cipher_b = multiElGamal.encrypt(cipher_b)
+distributed_cipher_a = conditional_gate.encrypt(cipher_a)
+distributed_cipher_b = conditional_gate.encrypt(cipher_b)
 
+a_n = conditional_gate.decrypt(distributed_cipher_a, secret_keys)
+print(a_n)
 
+distributed_cipher_ab = distributed_cipher_b * a_n
+
+ab = conditional_gate.decrypt(distributed_cipher_ab, secret_keys, domain=range(-200, 200))
+print(ab)

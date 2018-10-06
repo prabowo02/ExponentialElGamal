@@ -1,7 +1,5 @@
 import random
 
-from KeyGenerator import KeyGenerator
-
 
 class CipherText:
     def __init__(self, p, c1, c2):
@@ -31,25 +29,32 @@ class CipherText:
 
 class ExponentialElGamal:
     # Given a prime p and a secret key, generate g and public key
-    def __init__(self, p, key, g=None):
-        # A prime number
+    def __init__(self, p, g, h):
+        # Prime number
         self.p = p
         
         # Generator
-        self.g = g or KeyGenerator.generate_primitive_root(self.p)
+        self.g = g
         
         # Public key
-        self.h = pow(self.g, key, self.p)
+        self.h = h
 
-    
+
+    # Input: A message m
+    # Output: Cipher text of m
     def encrypt(self, message):
         r = random.randint(0, self.p - 1)
 
-        return CipherText(self.p, pow(self.g, r, self.p), pow(self.g, message, self.p) * pow(self.h, r, self.p) % self.p)
+        if message >= 0:
+            return CipherText(self.p, pow(self.g, r, self.p), pow(self.g, message, self.p) * pow(self.h, r, self.p) % self.p)
+        else:
+            return CipherText(self.p, pow(self.g, r, self.p), pow(pow(self.g, -message, self.p), self.p - 2, self.p) * pow(self.h, r, self.p) % self.p)
         
     
-    def decrypt(self, cipher_text, key, domain=(-1, 1)):
-        g_power_m = cipher_text.c2 * pow(pow(cipher_text.c1, key, self.p), self.p - 2, self.p) % self.p
+    # Input: cipher text, secret key, and message space (domain)
+    # Output: Decrypted message m from cipher text
+    def decrypt(self, cipher_text, sk, domain=(-1, 1)):
+        g_power_m = cipher_text.c2 * pow(pow(cipher_text.c1, sk, self.p), self.p - 2, self.p) % self.p
         
         for m in domain:
             if m >= 0:
