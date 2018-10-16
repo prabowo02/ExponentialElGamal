@@ -16,14 +16,23 @@ class ConditionalGate:
 
         self.s = [random.choice([-1, 1]) for i in range(n)]
 
+        
+    def encrypt(self, message):
+        return random.choice(self.servers).encrypt(message)
 
-    def encrypt(self, text):        
+
+    # Input: A ciphertext `text` encrypted using ExponentialElGamal
+    # Output: Another ciphertext which is reencrypted by all the servers 
+    def reencrypt_with_s(self, text):
         for server, s in zip(self.servers, self.s):
             text = text * s + server.encrypt(0)
 
         return text
 
 
+    # Input: - A ciphertext `text`
+    #        - `secret_keys` to all the servers
+    # Output: The decrypted message
     def decrypt(self, text, secret_keys, domain=(-1, 1)):
         g_power_m = text.c2
         for server, sk in zip(self.servers, secret_keys):
