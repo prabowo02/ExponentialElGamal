@@ -85,9 +85,10 @@ def generate_exponential_elgamal_key(length=1024):
     
     # Generator
     g = generate_primitive_root(p)
+    g = g*g % p
     
     # Secret key
-    sk = random.randint(2, p-1)
+    sk = random.randint(2, (p-1)//2)
     
     # Public key
     pk = pow(g, sk, p)
@@ -107,9 +108,10 @@ def generate_distributed_exponential_elgamal_keys(n, length=1024):
         
     # Generator
     g = generate_primitive_root(p)
+    g = g*g % p
     
     # Secret keys: [x_1, x_2, ..., x_n]
-    secret_keys = [random.randint(2, p-1) for i in range(n)]
+    secret_keys = [random.randint(2, (p-1)//2) for i in range(n)]
     
     # Public keys: [h_1, h_2, ..., h_n]
     public_keys = [pow(g, sk, p) for sk in secret_keys]
