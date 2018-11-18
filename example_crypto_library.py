@@ -5,6 +5,7 @@ from CryptoLibrary import set_encryption_scheme
 from CryptoLibrary import secure_add
 from CryptoLibrary import secure_comparison
 from CryptoLibrary import secure_xor
+from CryptoLibrary import secure_inequality
 from KeyGenerator import generate_distributed_exponential_elgamal_keys
 
 
@@ -52,3 +53,19 @@ print(decrypt_binary(x_lt_y, secret_keys))
 # Result should be 1
 y_lt_x = secure_comparison(y, x, secret_keys)
 print(decrypt_binary(y_lt_x, secret_keys))
+
+# ======================== EQUALITY ===========================
+
+x = encrypt_binary(6)
+y = encrypt_binary(3)
+
+# Result should be 1
+x_eq_y = secure_inequality(x, y, secret_keys)
+print(decrypt_binary(x_eq_y, secret_keys))
+
+x = encrypt_binary(6)
+y = encrypt_binary(6)
+
+# Result should be 0
+x_eq_y = secure_inequality(x, y, secret_keys)
+print(decrypt_binary(x_eq_y, secret_keys))
