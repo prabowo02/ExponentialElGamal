@@ -33,7 +33,9 @@ def conditional_gate_binary(x, y, secret_keys):
 
 # Input: An integer `n`
 # Output: A ciphertext of `n` using `encryption_scheme`
-def encrypt_binary(n, binary_length=0):
+def encrypt_binary(n, binary_length=1):
+    if n < 0:
+        return [encryption_scheme.encrypt(1)] + [encryption_scheme.encrypt(int(bit)) for bit in '{:0{}b}'.format(n + (1 << binary_length-1), binary_length-1)]
     return [encryption_scheme.encrypt(int(bit)) for bit in '{:0{}b}'.format(n, binary_length)]
 
 
@@ -83,11 +85,14 @@ def secure_add(X, Y, secret_key):
     return Z[::-1]
 
 
-# Input: E(x) and E(y)
-# Output: [E(1)] if x < y else [E(0)]
+# Input: X = E(x) = [E(x_{m-1}), ..., E(x_0)] and
+#        Y = E(y) = [E(y_{m-1}), ..., E(y_0)]
+# Output: E(1) if x < y else E(0)
 def secure_comparison(X, Y, secret_key):
     one = encryption_scheme.encrypt(1)
     t = encryption_scheme.encrypt(0)
+    
+    X[0], Y[0] = Y[0], X[0]
 
     for x, y in zip(X[::-1], Y[::-1]):
         xy = conditional_gate_binary(x, y, secret_key)
@@ -102,11 +107,14 @@ def secure_comparison(X, Y, secret_key):
 
         t = conditional_gate_binary(t, x_eq_y, secret_key) + x_lt_y
 
-    return [t]
+    X[0], Y[0] = Y[0], X[0]
+        
+    return t
 
 
-# Input: E(x) and E(y)
-# Output: [E(1)] if x != y else [E(0)]
+# Input: X = [E(x_{m-1}), ..., E(x_0)] and
+#        Y = [E(y_{m-1}), ..., E(y_0)]
+# Output: E(1) if x != y else E(0)
 def secure_inequality(X, Y, secret_key):
     one = encryption_scheme.encrypt(1)
     u = encryption_scheme.encrypt(0)
@@ -122,4 +130,31 @@ def secure_inequality(X, Y, secret_key):
 
         u = conditional_gate_binary(u, x_eq_y, secret_key) + x_ne_y
 
-    return [u]
+    return u
+
+
+# Input: X = [E(x_{m-1}), ..., E(x_0)],
+#        Y = [E(y_{m-1}), ..., E(y_0)] and
+#        bit = E(0) or bit =  E(1)
+# Output: If bit = E(0) output X, otherwise output Y
+def secure_multiplexer(X, Y, bit, secret_key):
+    bit_complement = secure_bit_xor(bit, encryption_scheme.encrypt(1))
+    return secure_add(
+        [conditional_gate_binary(x, bit_complement) for x in X],
+        [conditional_gate_binary(y, bit) for y in Y],
+    )
+
+    
+# Input: X = [E(x_{m-1}), ..., E(x_0)] and
+#        Y = [E(y_{m-1}), ..., E(y_0)]
+# Output: Z = E(z) = E(x * y) = [E(z_{m-1}), ..., E(z_0)]
+def secure_multiply(X, Y, secret_key):
+    result = encrypt_binary(0, binary_length=len(X))
+    adder = X
+    
+    for y in Y[::-1]:
+        y_times_adder = [conditional_gate_binary(y, bit, secret_key) for bit in adder]
+        result = secure_add(result, y_times_adder, secret_key)
+        adder = secure_add(adder, adder, secret_key)
+        
+    return result
