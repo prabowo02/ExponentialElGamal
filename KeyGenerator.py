@@ -46,16 +46,16 @@ def generate_prime_number(length=1024):
     while True:
         p = random.randint(prime_lower_bound, prime_upper_bound)
         
-        if KeyGenerator.is_prime(p):
+        if is_prime(p):
             return p
             
             
 # Returns a random `length`-bit prime number of the form 2*p + 1, where p is prime too
 def generate_safe_prime(length=1024):
     while True:
-        p = KeyGenerator.generate_prime_number(length - 1)
+        p = generate_prime_number(length - 1)
         
-        if KeyGenerator.is_prime(2*p + 1):
+        if is_prime(2*p + 1):
             return 2*p + 1
 
 
