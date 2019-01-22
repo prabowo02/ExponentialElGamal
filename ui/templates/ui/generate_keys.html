@@ -1,0 +1,68 @@
+{% extends 'ui/base.html' %}
+
+{% block content %}
+<form action="{% url 'ui:generate_keys' %}" method="POST">
+  {% csrf_token %}
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--12-col" align="center">
+      
+      {% if private_key %}
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+          <input class="mdl-textfield__input" type="text" id="public_key_public_key" value="{{ public_key.public_key }}" readonly onClick="this.select();">
+          <label class="mdl-textfield__label" for="public_key_public_key">Public key</label>
+        </div>
+        
+        </br>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+          <input class="mdl-textfield__input" type="text" id="public_key_prime" value="{{ public_key.prime }}" readonly onClick="this.select();">
+          <label class="mdl-textfield__label" for="public_key_prime">Prime</label>
+        </div>
+        
+        </br>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+          <input class="mdl-textfield__input" type="text" id="public_key_generator" value="{{ public_key.generator }}" readonly onClick="this.select();">
+          <label class="mdl-textfield__label" for="public_key_generator">Generator</label>
+        </div>
+        
+        </br>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+          <input class="mdl-textfield__input" type="text" id="public_key_private_key" value="{{ private_key }}" readonly onClick="this.select();">
+          <label class="mdl-textfield__label" for="public_key_public_key">Private key</label>
+        </div>
+        
+        </br>
+      {% elif public_key %}
+
+        <h4>Current public key: </h4>
+        
+        </br>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+          <input class="mdl-textfield__input" type="text" id="public_key_prime" value="{{ public_key.prime }}" readonly onClick="this.select();">
+          <label class="mdl-textfield__label" for="public_key_prime">Prime</label>
+        </div>
+        </br>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+          <input class="mdl-textfield__input" type="text" id="public_key_generator" value="{{ public_key.generator }}" readonly onClick="this.select();">
+          <label class="mdl-textfield__label" for="public_key_generator">Generator</label>
+        </div>
+        </br>
+        
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+          <input class="mdl-textfield__input" type="text" id="public_key_public_key" value="{{ public_key.public_key }}" readonly onClick="this.select();">
+          <label class="mdl-textfield__label" for="public_key_public_key">Public key</label>
+        </div>
+        </br>
+      {% endif %}
+      
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+        Generate new keys
+      </button>
+    </div>
+  </div>
+</form>
+{% endblock %}

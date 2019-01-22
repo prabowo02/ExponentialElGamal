@@ -1,0 +1,56 @@
+
+<title>ElGamal</title>
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'ui/icon.css' %}">
+<link rel="stylesheet" href="{% static 'ui/material.indigo-pink.min.css' %}">
+<script defer src="{% static 'ui/material.min.js' %}"></script>
+<script src="{% static 'ui/jquery.min.js' %}"></script>
+
+<style>
+.extrawide{
+  width: 800px;
+}
+.card-wide.mdl-card {
+  width: 768px;
+}
+</style>
+
+<body>
+  <!-- Always shows a header, even in smaller screens. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout-icon"></div>
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Exponential ElGamal</span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <!-- Navigation. We hide it in small screens.
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+          <a class="mdl-navigation__link" href="">Link</a>
+        </nav>-->
+      </div>
+    </header>
+    <main class="mdl-layout__content">
+      {% block content %}{% endblock %}
+   
+    </main>
+    
+    <!--footer class="mdl-mini-footer">
+      <div class="mdl-mini-footer__left-section">
+        <div class="mdl-logo">Title</div>
+        <ul class="mdl-mini-footer__link-list">
+          <li><a href="#">Help</a></li>
+          <li><a href="#">Privacy & Terms</a></li>
+        </ul>
+      </div>
+    </footer-->
+  </div>
+
+  
+</body>

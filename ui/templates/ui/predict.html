@@ -1,0 +1,134 @@
+{% extends 'ui/base.html' %}
+
+{% block content %}
+
+<script>
+
+function sendData() {
+  
+  var formData = new FormData(document.querySelector("form"));
+  var data = {};
+  formData.forEach(function(value, key){
+      data[key] = value;
+  });
+  
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("predict").style.display = "none";
+  document.getElementById("result").innerHTML = "";
+  
+  $.post("/predict/", data, function(data, status) {  
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("predict").style.display = "block";
+    document.getElementById("result").innerHTML = data + " heart disease"
+    console.log(data)
+  });
+
+}
+
+function isValidForm() {
+  attrs = ["age", "pressure", "cholestoral"];
+  for (let i = 0; i < attrs.length; ++i) {
+    attr = attrs[i];
+    
+    if (document.getElementById(attr).value === "") {
+      document.getElementById(attr).focus();
+      
+      document.querySelector('#toast_required').MaterialSnackbar.showSnackbar({
+        message: 'All fields are required'
+      });
+      
+      return false;
+    }
+  }
+  
+  sendData();
+  return false;
+}
+</script>
+
+<div id="toast_required" class="mdl-js-snackbar mdl-snackbar">
+  <div class="mdl-snackbar__text"></div>
+  <button class="mdl-snackbar__action" type="button"></button>
+</div>
+
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--12-col" align="center">      
+    <div class="card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Predict Heart Disease</h2>
+      </div>
+      <div class="mdl-card__supporting-text" align="left">
+        Input patient information below and we will predict the patient's heart disease severity.
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <form method="POST" onsubmit="return isValidForm();">
+        {% csrf_token %}
+        
+          <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col" align="left">
+            
+              <h4> Age </h4>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="age" name="age" pattern="[0-9]+">
+                <label class="mdl-textfield__label" for="age">Patient's age</label>
+                <span class="mdl-textfield__error">Input must be a positive integer</span>
+              </div>
+              <br/>
+              
+              <h4> Gender </h4>
+              <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="male">
+                <input type="radio" id="male" name="gender" class="mdl-radio__button" value="Male" checked>
+                <span class = "mdl-radio__label">Male</span>
+              </label>
+              <br/> <br/>
+              <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="female">
+                <input type="radio" id="female" name="gender" class="mdl-radio__button" value="Female">
+                <span class = "mdl-radio__label">Female</span>
+              </label>
+              <br/>
+              <br/>
+              
+              <h4> Resting Blood Pressure </h4>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="pressure" name="pressure" pattern="[0-9]+">
+                <label class="mdl-textfield__label" for="pressure">Patient's blood pressure</label>
+                <span class="mdl-textfield__error">Input must be a positive integer</span>
+              </div>
+              <br/>
+              
+              <h4> Serum Cholestoral </h4>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="cholestoral" name="cholestoral" pattern="[0-9]+">
+                <label class="mdl-textfield__label" for="cholestoral">Patient's serum cholestoral</label>
+                <span class="mdl-textfield__error">Input must be a positive integer</span>
+              </div>
+              <br/>
+              
+              <h4> Heart Rate </h4>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="heart_rate" name="heart_rate" pattern="[0-9]+">
+                <label class="mdl-textfield__label" for="heart_rate">Patient's heart rate</label>
+                <span class="mdl-textfield__error">Input must be a positive integer</span>
+              </div>
+              <br/>
+              <br/>
+              
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="predict">
+                Predict
+              </button>
+              
+              <div id="loading" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" style="display:None"></div>
+              
+              <h5 id="result"></h5>
+              
+            </div>
+          </div>
+          
+        </form>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
