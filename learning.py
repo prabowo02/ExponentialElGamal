@@ -47,6 +47,13 @@ def main():
     
     print(clf.score(X_test, Y_test))
     
+    X = [
+        [23, 0, 98, 98, 98],
+        [90, 0, 44, 44, 44],
+    ]
+    print(clf.predict(X))
+    print(clf.decision_function(X))
+
     
 if __name__ == '__main__':
     main()
