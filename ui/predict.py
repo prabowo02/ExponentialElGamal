@@ -6,12 +6,15 @@ from .models import PublicKeys
 from .models import Coefficients
 from ConditionalGate import ConditionalGate
 from CryptoLibrary import encrypt_binary
+from CryptoLibrary import decrypt_binary
 from CryptoLibrary import secure_add
+from CryptoLibrary import secure_comparison
 from CryptoLibrary import secure_multiply
+from CryptoLibrary import secure_multiplexer
 from CryptoLibrary import set_encryption_scheme
 from ExponentialElGamal import CipherText
 
-PRECISION = 64
+PRECISION = 32
 
 
 def setup_encryption_scheme():
@@ -66,19 +69,19 @@ def get_distances(attrs, coeffs, secret_key):
 
     for row in coeffs:
         distance = encrypt_binary(0, PRECISION)
-        print('computing distance')
         for attr, coeff in zip(attrs, row):
             print('add one term')
-            secure_add(distance, secure_multiply(attr, coeff, secret_key), secret_key)
+            distance = secure_add(distance, secure_multiply(attr, coeff, secret_key), secret_key)
         
         distance = secure_add(distance, row[-1], secret_key)
         
         distances.append(distance)
+        print(decrypt_binary(distance, secret_key))
         
     return distances
 
     
-def get_max_index(distances):
+def get_max_index(distances, secret_key):
     encrypted_index = encrypt_binary(0, PRECISION)
     encrypted_max_distance = distances[0]
     

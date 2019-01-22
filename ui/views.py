@@ -10,7 +10,7 @@ from CryptoLibrary import set_encryption_scheme
 from CryptoLibrary import encrypt_binary
 from KeyGenerator import generate_distributed_exponential_elgamal_keys
 
-PRIME_LENGTH = 128
+PRIME_LENGTH = 42
 
 
 def index(request):
