@@ -4,6 +4,7 @@ from CryptoLibrary import encrypt_binary
 from CryptoLibrary import set_encryption_scheme
 from CryptoLibrary import secure_add
 from CryptoLibrary import secure_comparison
+from CryptoLibrary import secure_multiply
 from CryptoLibrary import secure_xor
 from CryptoLibrary import secure_inequality
 from KeyGenerator import generate_distributed_exponential_elgamal_keys
@@ -47,11 +48,11 @@ x = encrypt_binary(12)
 y = encrypt_binary(10)
 
 # Result should be 0
-x_lt_y = secure_comparison(x, y, secret_keys)
+x_lt_y = [secure_comparison(x, y, secret_keys)]
 print(decrypt_binary(x_lt_y, secret_keys))
 
 # Result should be 1
-y_lt_x = secure_comparison(y, x, secret_keys)
+y_lt_x = [secure_comparison(y, x, secret_keys)]
 print(decrypt_binary(y_lt_x, secret_keys))
 
 # ======================== EQUALITY ===========================
@@ -60,12 +61,21 @@ x = encrypt_binary(6)
 y = encrypt_binary(3)
 
 # Result should be 1
-x_eq_y = secure_inequality(x, y, secret_keys)
+x_eq_y = [secure_inequality(x, y, secret_keys)]
 print(decrypt_binary(x_eq_y, secret_keys))
 
 x = encrypt_binary(6)
 y = encrypt_binary(6)
 
 # Result should be 0
-x_eq_y = secure_inequality(x, y, secret_keys)
+x_eq_y = [secure_inequality(x, y, secret_keys)]
 print(decrypt_binary(x_eq_y, secret_keys))
+
+# ========================= MULTIPLY ============================
+
+x = encrypt_binary(3, binary_length=4)
+y = encrypt_binary(4, binary_length=4)
+
+# Result should be 12
+x_mul_y = secure_multiply(x, y, secret_keys)
+print(decrypt_binary(x_mul_y, secret_keys))
