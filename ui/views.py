@@ -70,3 +70,7 @@ def generate_keys(request):
     return render(request, 'ui\\generate_keys.html', {
         'public_key': public_key,
     })
+
+    
+def compute(request):
+    return render(request, 'ui\\compute.html')

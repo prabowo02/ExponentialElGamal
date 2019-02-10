@@ -138,10 +138,11 @@ def secure_inequality(X, Y, secret_key):
 #        bit = E(0) or bit =  E(1)
 # Output: If bit = E(0) output X, otherwise output Y
 def secure_multiplexer(X, Y, bit, secret_key):
-    bit_complement = secure_bit_xor(bit, encryption_scheme.encrypt(1))
+    bit_complement = secure_bit_xor(bit, encryption_scheme.encrypt(1), secret_key)
     return secure_add(
-        [conditional_gate_binary(x, bit_complement) for x in X],
-        [conditional_gate_binary(y, bit) for y in Y],
+        [conditional_gate_binary(x, bit_complement, secret_key) for x in X],
+        [conditional_gate_binary(y, bit, secret_key) for y in Y],
+        secret_key,
     )
 
     

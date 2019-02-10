@@ -12,7 +12,7 @@ from KeyGenerator import generate_distributed_exponential_elgamal_keys
 
 NUMBER_OF_SERVERS = 3
 
-p, g, h, secret_keys = generate_distributed_exponential_elgamal_keys(NUMBER_OF_SERVERS)
+p, g, h, secret_keys = generate_distributed_exponential_elgamal_keys(NUMBER_OF_SERVERS, 128)
 set_encryption_scheme(ConditionalGate(NUMBER_OF_SERVERS, p, g, h))
 
 # =========================== XOR ============================
@@ -73,8 +73,8 @@ print(decrypt_binary(x_eq_y, secret_keys))
 
 # ========================= MULTIPLY ============================
 
-x = encrypt_binary(3, binary_length=4)
-y = encrypt_binary(4, binary_length=4)
+x = encrypt_binary(3, binary_length=32)
+y = encrypt_binary(4, binary_length=32)
 
 # Result should be 12
 x_mul_y = secure_multiply(x, y, secret_keys)

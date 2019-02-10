@@ -53,7 +53,7 @@ def main():
     ]
     print(clf.predict(X))
     print(clf.decision_function(X))
-
+    
     
 if __name__ == '__main__':
     main()

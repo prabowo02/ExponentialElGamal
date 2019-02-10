@@ -1,0 +1,78 @@
+{% extends 'ui/base.html' %}
+
+{% block content %}
+
+<script>
+
+function sendData() {
+  var c1 = document.getElementById('c1').value;
+  var c2 = document.getElementById('c2').value;
+  var op = document.getElementsByName('operation')[0].value;
+  
+  var url;
+  if (op == 'add') url = '/compute/add/';
+  else if (op == 'xor') url = '/compute/xor/';
+  else if (op == 'comp') url = '/compute/comparison/';
+  else if (op == 'ineq') url = '/compute/inequality/';
+  else if (op == 'multiply') url = '/compute/multiply/';
+  
+  var data = {
+    'c1': c1,
+    'c2': c2
+  };
+  
+  $.get(url, data, function(data, status) {
+    document.getElementById('result').value = data;
+    console.log(data);
+  });
+
+}
+
+</script>
+
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--12-col" align="center">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+      <input class="mdl-textfield__input" type="text" id="c1">
+      <label class="mdl-textfield__label" for="c1">Cipher 1</label>
+    </div>
+    </br>
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+      <input class="mdl-textfield__input" type="text" id="c2">
+      <label class="mdl-textfield__label" for="c2">Cipher 2</label>
+    </div>
+    </br>
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height">
+      <input type="text" value="" class="mdl-textfield__input" id="operation" readonly>
+      <input type="hidden" value="" name="operation">
+      <i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i>
+      <label for="operation" class="mdl-textfield__label">Operation</label>
+      <ul for="operation" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+        <li class="mdl-menu__item" data-val="add">Addition</li>
+        <li class="mdl-menu__item" data-val="xor">Xor</li>
+        <li class="mdl-menu__item" data-val="comp">Comparison</li>
+        <li class="mdl-menu__item" data-val="ineq">Inequality</li>
+        <li class="mdl-menu__item" data-val="multiply">Multiplication</li>
+      </ul>
+    </div>
+    
+    </br>
+    
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" id="predict" onmouseup="sendData()">
+      Compute
+    </button>
+    
+    </br>
+    
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+      <input class="mdl-textfield__input" type="text" id="result" value=" " readonly onClick="this.select();">
+      <label class="mdl-textfield__label" for="result">Result</label>
+    </div>
+    </br>
+    
+  </div>
+</div>
+
+{% endblock %}
