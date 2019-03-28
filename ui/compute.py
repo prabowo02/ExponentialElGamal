@@ -1,3 +1,5 @@
+import os
+import subprocess
 import time
 
 from django.http import HttpResponse
@@ -12,6 +14,9 @@ from CryptoLibrary import secure_inequality
 from CryptoLibrary import secure_multiply
 from CryptoLibrary import set_encryption_scheme
 from ExponentialElGamal import CipherText
+
+
+COMPUTATION_DIR = os.path.join('ui', 'compute')
 
 
 def setup_encryption_scheme():
@@ -47,17 +52,21 @@ def clean_data(fn):
         p, _, _ = setup_encryption_scheme()
         sk = get_secret_key()
         
-        x = str_to_cipher(p, request.GET['c1'])
-        y = str_to_cipher(p, request.GET['c2'])
+        x = request.GET['c1']
+        y = request.GET['c2']
         
-        return HttpResponse(cipher_to_str(fn(x, y, sk)))
+        return HttpResponse(fn(x, y, sk))
         
     return clean_data_wrapped
 
 
 @clean_data
 def add(x, y, sk):
-    return secure_add(x, y, sk)
+    process = subprocess.Popen([os.path.join(COMPUTATION_DIR, 'add.exe'), x, y], stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    return output
+
+    # return secure_add(x, y, sk)
     
 
 @clean_data
